@@ -31,10 +31,10 @@
     "tracy/tracy": "^2.6.0",
     "ninjify/nunjuck": "^0.4.0",
     "ninjify/qa": "^0.12.2",
-    "phpstan/phpstan": "^1.0",
-    "phpstan/phpstan-deprecation-rules": "^1.0",
-    "phpstan/phpstan-nette": "^1.0",
-    "phpstan/phpstan-strict-rules": "^1.0"
+    "phpstan/phpstan": "^1.4.2",
+    "phpstan/phpstan-deprecation-rules": "^1.0.0",
+    "phpstan/phpstan-nette": "^1.0.0",
+    "phpstan/phpstan-strict-rules": "^1.1.0"
   },
   "conflict": {
     "nette/utils": "<2.5.7"
