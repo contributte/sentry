@@ -33,7 +33,7 @@ class ExtraIntegration extends BaseIntegration
 
 	public function setup(HubInterface $hub, Event $event): void
 	{
-		$extra = $this->data;
+		$extra = array_merge($event->getExtra(), $this->data);
 
 		if ($this->preset['memory']) {
 			$extra['memory'] = (memory_get_peak_usage(true) / 1024 / 1024) . ' MB';

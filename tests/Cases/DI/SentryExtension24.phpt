@@ -53,5 +53,5 @@ Toolkit::test(function (): void {
 			->build();
 
 		call_user_func([$container, 'initialize']);
-	}, LogicalException::class, 'Missing client config');
+	}, LogicalException::class, 'Missing Sentry DSN config');
 });

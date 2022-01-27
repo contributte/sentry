@@ -11,12 +11,16 @@ class Sentry
 {
 
 	/**
-	 * @param mixed[] $config
+	 * @param array{client?: array<string, mixed>} $config
 	 */
 	public static function register(array $config): void
 	{
-		if (($config['client'] ?? []) === []) {
-			throw new LogicalException('Missing client config');
+		if (!isset($config['client']) || $config['client'] === []) {
+			throw new LogicalException('Missing Sentry client config');
+		}
+
+		if (($config['client']['dsn'] ?? null) === null) {
+			throw new LogicalException('Missing Sentry DSN config');
 		}
 
 		$builder = ClientBuilder::create($config['client']);

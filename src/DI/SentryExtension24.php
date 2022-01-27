@@ -2,11 +2,25 @@
 
 namespace Contributte\Sentry\DI;
 
+use Contributte\Sentry\Integration\ExtraIntegration;
+use Contributte\Sentry\Integration\NetteApplicationIntegration;
+use Contributte\Sentry\Integration\NetteHttpIntegration;
+use Contributte\Sentry\Integration\NetteSecurityIntegration;
+use Contributte\Sentry\Integration\NetteSessionIntegration;
 use Contributte\Sentry\Sentry;
 use Contributte\Sentry\Tracy\MultiLogger;
 use Contributte\Sentry\Tracy\SentryLogger;
 use Nette\DI\CompilerExtension;
+use Nette\DI\Statement;
 use Nette\PhpGenerator\ClassType;
+use Sentry\Integration\EnvironmentIntegration;
+use Sentry\Integration\ErrorListenerIntegration;
+use Sentry\Integration\ExceptionListenerIntegration;
+use Sentry\Integration\FatalErrorListenerIntegration;
+use Sentry\Integration\FrameContextifierIntegration;
+use Sentry\Integration\ModulesIntegration;
+use Sentry\Integration\RequestIntegration;
+use Sentry\Integration\TransactionIntegration;
 use Tracy\Debugger;
 use Tracy\ILogger;
 
@@ -88,12 +102,35 @@ class SentryExtension24 extends CompilerExtension
 
 	private function afterSentryCompile(ClassType $class): void
 	{
-		$config = $this->getConfig();
 		$builder = $this->getContainerBuilder();
 
+		// Build config
+		$config = $this->getConfig();
+		$client = $config['client'] ?? [];
+
+		if ($config['integrations']) {
+			$client['integrations'] = [
+				// Sentry
+				new Statement(EnvironmentIntegration::class),
+				new Statement(ErrorListenerIntegration::class),
+				new Statement(ExceptionListenerIntegration::class),
+				new Statement(FatalErrorListenerIntegration::class),
+				new Statement(FrameContextifierIntegration::class, [null]),
+				new Statement(ModulesIntegration::class),
+				new Statement(RequestIntegration::class, [null]),
+				new Statement(TransactionIntegration::class),
+				// Nette
+				new Statement(NetteApplicationIntegration::class),
+				new Statement(NetteHttpIntegration::class),
+				new Statement(NetteSecurityIntegration::class),
+				new Statement(NetteSessionIntegration::class),
+				new Statement(ExtraIntegration::class, [[]]),
+			];
+		}
+
 		$initialize = $class->getMethod('initialize');
-		$initialize->addBody($builder->formatPhp(Sentry::class . '::register(?);', ['client' => $config['client'] ?? []]));
-		$initialize->addBody($builder->formatPhp(Debugger::class . '::setLogger(?);', [$this->prefix('@multiLogger')]));
+		$initialize->addBody($builder->formatPhp(Sentry::class . '::register(?);', [['client' => $client]]));
+		$initialize->addBody($builder->formatPhp(Debugger::class . '::setLogger(?);', [$builder->getDefinition($this->prefix('multiLogger'))]));
 	}
 
 }

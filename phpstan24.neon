@@ -21,11 +21,6 @@ parameters:
 			path: src/Integration/NetteSecurityIntegration.php
 
 		-
-			message: "#^Parameter \\#1 \\$options of static method Sentry\\\\ClientBuilder\\:\\:create\\(\\) expects array\\<string, mixed\\>, mixed given\\.$#"
-			count: 1
-			path: src/Sentry.php
-
-		-
 			message: "#^Call to deprecated method formatPhp\\(\\) of class Nette\\\\DI\\\\ContainerBuilder\\.$#"
 			count: 2
 			path: src/DI/SentryExtension24.php
