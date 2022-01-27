@@ -1,0 +1,66 @@
+{
+  "name": "contributte/sentry",
+  "description": "First class integration of Sentry to Nette Framework",
+  "keywords": [
+    "nette",
+    "sentry",
+    "logging",
+    "errors",
+    "tracking"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://github.com/contributte/sentry",
+  "authors": [
+    {
+      "name": "Milan Felix Šulc",
+      "homepage": "https://f3l1x.io"
+    }
+  ],
+  "require": {
+    "php": ">=7.2",
+    "sentry/sentry": "^3.3.7",
+    "guzzlehttp/guzzle": "^7.4.1",
+    "php-http/guzzle7-adapter": "1.0.0"
+  },
+  "require-dev": {
+    "nette/di": "^2.4.17 || ^3.0.12",
+    "nette/http": "^2.4.12 || ^3.0.7",
+    "nette/security": "^2.4.4 || ^3.0.6",
+    "nette/application": "^2.4.17 || ^3.0.8",
+    "tracy/tracy": "^2.6.0",
+    "ninjify/nunjuck": "^0.4.0",
+    "ninjify/qa": "^0.12.2",
+    "phpstan/phpstan": "^1.0",
+    "phpstan/phpstan-deprecation-rules": "^1.0",
+    "phpstan/phpstan-nette": "^1.0",
+    "phpstan/phpstan-strict-rules": "^1.0"
+  },
+  "conflict": {
+    "nette/utils": "<2.5.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Contributte\\Sentry\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "composer/package-versions-deprecated": true
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.2.x-dev"
+    }
+  }
+}
