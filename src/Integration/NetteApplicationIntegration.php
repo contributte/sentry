@@ -8,7 +8,6 @@ use Nette\DI\Container;
 use Sentry\Breadcrumb;
 use Sentry\Event;
 use Sentry\State\HubInterface;
-use Sentry\State\Scope;
 
 class NetteApplicationIntegration extends BaseIntegration
 {
@@ -23,36 +22,42 @@ class NetteApplicationIntegration extends BaseIntegration
 
 	public function setup(HubInterface $hub, Event $event): void
 	{
-		$hub->configureScope(function (Scope $scope): void {
-			$app = $this->context->getByType(Application::class);
+		/** @var Application|null $application */
+		$application = $this->context->getByType(Application::class, false);
 
-			// Get application requests
-			if ($app->getRequests() === []) {
-				return;
+		// There is no application
+		if ($application === null) {
+			return;
+		}
+
+		foreach ($application->getRequests() as $n => $request) {
+			$data = [
+				'method' => $request->getMethod(),
+				'presenter' => $request->getPresenterName(),
+				'params' => $request->getParameters(),
+			];
+
+			if ($request->hasFlag(Request::VARYING)) {
+				$data['flag'] = Request::VARYING;
+			} elseif ($request->hasFlag(Request::RESTORED)) {
+				$data['flag'] = Request::RESTORED;
 			}
 
-			foreach ($app->getRequests() as $n => $request) {
-				$data = [
-					'method' => $request->getMethod(),
-					'presenter' => $request->getPresenterName(),
-					'params' => $request->getParameters(),
-				];
-
-				if ($request->hasFlag(Request::VARYING)) {
-					$data['flag'] = Request::VARYING;
-				} elseif ($request->hasFlag(Request::RESTORED)) {
-					$data['flag'] = Request::RESTORED;
-				}
-
-				$scope->addBreadcrumb(new Breadcrumb(
-					Breadcrumb::LEVEL_INFO,
-					Breadcrumb::TYPE_HTTP,
-					'nette_application_request',
-					sprintf('Nette Application Request #%s', intval($n) + 1),
-					$data
-				));
-			}
-		});
+			$event->setBreadcrumb(
+				array_merge(
+					$event->getBreadcrumbs(),
+					[
+						new Breadcrumb(
+							Breadcrumb::LEVEL_INFO,
+							Breadcrumb::TYPE_HTTP,
+							'nette_application_request',
+							sprintf('Nette Application Request #%s', intval($n) + 1),
+							$data
+						),
+					]
+				)
+			);
+		}
 	}
 
 }

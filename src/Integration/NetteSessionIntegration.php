@@ -7,7 +7,6 @@ use Nette\Http\Session;
 use Sentry\Breadcrumb;
 use Sentry\Event;
 use Sentry\State\HubInterface;
-use Sentry\State\Scope;
 
 class NetteSessionIntegration extends BaseIntegration
 {
@@ -22,29 +21,41 @@ class NetteSessionIntegration extends BaseIntegration
 
 	public function setup(HubInterface $hub, Event $event): void
 	{
-		$hub->configureScope(function (Scope $scope) use ($event): void {
-			$session = $this->context->getByType(Session::class);
-			$iterator = $session->getIterator();
-			$data = [];
+		/** @var Session|null $session */
+		$session = $this->context->getByType(Session::class, false);
 
-			foreach ($iterator as $section) {
-				$data[(string) $section] = iterator_to_array($session->getSection($section)->getIterator());
-			}
+		// There is no session
+		if ($session === null) {
+			return;
+		}
 
-			$scope->addBreadcrumb(new Breadcrumb(
-				Breadcrumb::LEVEL_INFO,
-				Breadcrumb::TYPE_HTTP,
-				'nette_session',
-				'Nette Session',
-				$data
-			));
+		$iterator = $session->getIterator();
+		$data = [];
 
-			if (PHP_SAPI !== 'cli') {
-				$event->setTags([
-					'phpsessid' => $session->getId(),
-				]);
-			}
-		});
+		foreach ($iterator as $section) {
+			$data[(string) $section] = iterator_to_array($session->getSection($section)->getIterator());
+		}
+
+		$event->setBreadcrumb(
+			array_merge(
+				$event->getBreadcrumbs(),
+				[
+					new Breadcrumb(
+						Breadcrumb::LEVEL_INFO,
+						Breadcrumb::TYPE_HTTP,
+						'nette_session',
+						'Nette Session',
+						$data
+					),
+				]
+			)
+		);
+
+		if (PHP_SAPI !== 'cli') {
+			$event->setTags([
+				'phpsessid' => $session->getId(),
+			]);
+		}
 	}
 
 }

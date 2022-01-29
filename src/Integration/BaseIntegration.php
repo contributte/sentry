@@ -17,7 +17,7 @@ abstract class BaseIntegration implements IntegrationInterface
 	{
 		Scope::addGlobalEventProcessor(function (Event $event): Event {
 			$hub = SentrySdk::getCurrentHub();
-			$integration = $hub->getIntegration(self::class);
+			$integration = $hub->getIntegration(static::class);
 
 			// The integration could be bound to a client that is not the one
 			// attached to the current hub. If this is the case, bail out

@@ -4,11 +4,9 @@ namespace Contributte\Sentry\Integration;
 
 use Nette\DI\Container;
 use Nette\Http\IRequest;
-use Nette\Security\Identity;
 use Nette\Security\IUserStorage;
 use Sentry\Event;
 use Sentry\State\HubInterface;
-use Sentry\State\Scope;
 use Sentry\UserDataBag;
 
 class NetteSecurityIntegration extends BaseIntegration
@@ -24,29 +22,34 @@ class NetteSecurityIntegration extends BaseIntegration
 
 	public function setup(HubInterface $hub, Event $event): void
 	{
-		$hub->configureScope(function (Scope $scope): void {
-			/** @var Identity|null $identity */
-			$identity = $this->context->getByType(IUserStorage::class)->getIdentity();
+		/** @var IUserStorage|null $storage */
+		$storage = $this->context->getByType(IUserStorage::class, false);
 
-			// User can be not logged in
-			if ($identity === null) {
-				return;
-			}
+		// There is no user storage
+		if ($storage === null) {
+			return;
+		}
 
-			$httpRequest = $this->context->getByType(IRequest::class);
+		$identity = $storage->getIdentity();
 
-			$bag = new UserDataBag(
-				(string) $identity->getId(),
-				$identity->getData()['email'] ?? null,
-				$httpRequest->getRemoteAddress(),
-				$identity->getData()['username'] ?? null
-			);
+		// Anonymous user
+		if ($identity === null) {
+			return;
+		}
 
-			$bag->setMetadata('Roles', implode(',', $identity->getRoles()));
-			$bag->setMetadata('Identity', $identity->getData());
+		$httpRequest = $this->context->getByType(IRequest::class);
 
-			$scope->setUser($bag);
-		});
+		$bag = new UserDataBag(
+			(string) $identity->getId(),
+			$identity->getData()['email'] ?? null,
+			$httpRequest->getRemoteAddress(),
+			$identity->getData()['username'] ?? null
+		);
+
+		$bag->setMetadata('Roles', implode(',', $identity->getRoles()));
+		$bag->setMetadata('Identity', $identity->getData());
+
+		$event->setUser($bag);
 	}
 
 }

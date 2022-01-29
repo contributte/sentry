@@ -20,7 +20,13 @@ class NetteHttpIntegration extends BaseIntegration
 
 	public function setup(HubInterface $hub, Event $event): void
 	{
+		/** @var IRequest|null $httpRequest */
 		$httpRequest = $this->context->getByType(IRequest::class);
+
+		// There is no http request
+		if ($httpRequest === null) {
+			return;
+		}
 
 		$data = [
 			'url' => $httpRequest->getUrl()->__toString(),
