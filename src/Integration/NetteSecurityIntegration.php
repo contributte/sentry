@@ -4,6 +4,7 @@ namespace Contributte\Sentry\Integration;
 
 use Nette\DI\Container;
 use Nette\Http\IRequest;
+use Nette\Security\Identity;
 use Nette\Security\IUserStorage;
 use Sentry\Event;
 use Sentry\State\HubInterface;
@@ -30,6 +31,7 @@ class NetteSecurityIntegration extends BaseIntegration
 			return;
 		}
 
+		/** @var Identity|null $identity */
 		$identity = $storage->getIdentity();
 
 		// Anonymous user
