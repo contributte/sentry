@@ -31,7 +31,7 @@ class ExtraIntegration extends BaseIntegration
 		$this->preset[$field] = $enable;
 	}
 
-	public function setup(HubInterface $hub, Event $event): void
+	public function setup(HubInterface $hub, Event $event): ?Event
 	{
 		$extra = array_merge($event->getExtra(), $this->data);
 
@@ -48,6 +48,8 @@ class ExtraIntegration extends BaseIntegration
 		}
 
 		$event->setExtra($extra);
+
+		return $event;
 	}
 
 }

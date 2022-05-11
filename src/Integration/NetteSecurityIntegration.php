@@ -21,14 +21,14 @@ class NetteSecurityIntegration extends BaseIntegration
 		$this->context = $context;
 	}
 
-	public function setup(HubInterface $hub, Event $event): void
+	public function setup(HubInterface $hub, Event $event): ?Event
 	{
 		/** @var IUserStorage|null $storage */
 		$storage = $this->context->getByType(IUserStorage::class, false);
 
 		// There is no user storage
 		if ($storage === null) {
-			return;
+			return $event;
 		}
 
 		/** @var Identity|null $identity */
@@ -36,7 +36,7 @@ class NetteSecurityIntegration extends BaseIntegration
 
 		// Anonymous user
 		if ($identity === null) {
-			return;
+			return $event;
 		}
 
 		$httpRequest = $this->context->getByType(IRequest::class);
@@ -52,6 +52,8 @@ class NetteSecurityIntegration extends BaseIntegration
 		$bag->setMetadata('Identity', $identity->getData());
 
 		$event->setUser($bag);
+
+		return $event;
 	}
 
 }

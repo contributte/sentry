@@ -19,21 +19,22 @@ class NetteSessionIntegration extends BaseIntegration
 		$this->context = $context;
 	}
 
-	public function setup(HubInterface $hub, Event $event): void
+	public function setup(HubInterface $hub, Event $event): ?Event
 	{
 		/** @var Session|null $session */
 		$session = $this->context->getByType(Session::class, false);
 
 		// There is no session
 		if ($session === null) {
-			return;
+			return $event;
 		}
 
+		/** @var array<mixed, string> $iterator */
 		$iterator = $session->getIterator();
 		$data = [];
 
 		foreach ($iterator as $section) {
-			$data[(string) $section] = iterator_to_array($session->getSection($section)->getIterator());
+			$data[$section] = iterator_to_array($session->getSection($section)->getIterator());
 		}
 
 		$event->setBreadcrumb(
@@ -56,6 +57,8 @@ class NetteSessionIntegration extends BaseIntegration
 				'phpsessid' => $session->getId(),
 			]);
 		}
+
+		return $event;
 	}
 
 }
