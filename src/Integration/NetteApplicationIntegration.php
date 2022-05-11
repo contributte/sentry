@@ -20,14 +20,14 @@ class NetteApplicationIntegration extends BaseIntegration
 		$this->context = $context;
 	}
 
-	public function setup(HubInterface $hub, Event $event): void
+	public function setup(HubInterface $hub, Event $event): ?Event
 	{
 		/** @var Application|null $application */
 		$application = $this->context->getByType(Application::class, false);
 
 		// There is no application
 		if ($application === null) {
-			return;
+			return $event;
 		}
 
 		foreach ($application->getRequests() as $n => $request) {
@@ -58,6 +58,8 @@ class NetteApplicationIntegration extends BaseIntegration
 				)
 			);
 		}
+
+		return $event;
 	}
 
 }

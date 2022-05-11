@@ -180,6 +180,21 @@ sentry:
             ])
 ```
 
+**IgnoreErrorIntegration**
+
+Allow to ignore exceptions.
+
+```neon
+sentry:
+    client:
+        integrations:
+            - Contributte\Sentry\Integration\IgnoreErrorIntegration([
+                ignore_exception_regex: [
+                    "/Deprecated (.*)/"
+                ]
+            ])
+```
+
 ## Usage
 
 Sentry is successfully integrated to your [Nette](https://nette.org) application and listen for any errors using [Tracy](https://tracy.nette.org).
