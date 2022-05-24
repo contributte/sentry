@@ -10,12 +10,15 @@ use Sentry\State\Scope;
 use Tester\Assert;
 use function Sentry\withScope;
 
-require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../../../bootstrap.php';
 
-// Ignore exception
+// not matched exception and matched event
 Toolkit::test(function (): void {
 	$integration = new IgnoreErrorIntegration([
 		'ignore_exception_regex' => [
+			'#foo bar#',
+		],
+		'ignore_message_regex' => [
 			'#foo bar#',
 		],
 	]);
@@ -29,7 +32,8 @@ Toolkit::test(function (): void {
 	SentrySdk::getCurrentHub()->bindClient($client);
 
 	$event = Event::createEvent();
-	$event->setExceptions([new ExceptionDataBag(new RuntimeException('foo bar'))]);
+	$event->setMessage('foo bar');
+	$event->setExceptions([new ExceptionDataBag(new RuntimeException('bar foo'))]);
 
 	withScope(function (Scope $scope) use ($event): void {
 		$event = $scope->applyToEvent($event);

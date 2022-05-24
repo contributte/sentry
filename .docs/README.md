@@ -182,7 +182,7 @@ sentry:
 
 **IgnoreErrorIntegration**
 
-Allow to ignore exceptions.
+Allow to ignore exceptions or event message.
 
 ```neon
 sentry:
@@ -191,7 +191,10 @@ sentry:
             - Contributte\Sentry\Integration\IgnoreErrorIntegration([
                 ignore_exception_regex: [
                     '/Deprecated (.*)/'
-                ]
+                ],
+                ignore_message_regex: [
+                    '/PHP Deprecated (.*)/'
+                ],
             ])
 ```
 
