@@ -21,9 +21,11 @@ class IgnoreErrorIntegration extends BaseIntegration
 		$resolver = new OptionsResolver();
 		$resolver->setDefaults([
 			'ignore_exception_regex' => [],
+			'ignore_message_regex' => [],
 		]);
 
 		$resolver->setAllowedTypes('ignore_exception_regex', ['array']);
+		$resolver->setAllowedTypes('ignore_message_regex', ['array']);
 
 		$this->options = $resolver->resolve($options);
 	}
@@ -31,6 +33,10 @@ class IgnoreErrorIntegration extends BaseIntegration
 	public function setup(HubInterface $hub, Event $event): ?Event
 	{
 		if ($this->isIgnoredByExceptionRegex($event)) {
+			return null;
+		}
+
+		if ($this->isIgnoredByMessageRegex($event)) {
 			return null;
 		}
 
@@ -49,6 +55,23 @@ class IgnoreErrorIntegration extends BaseIntegration
 		$regexes = $this->options['ignore_exception_regex'];
 		foreach ($regexes as $regex) {
 			if (Regex::match($exceptions[0]->getValue(), $regex) !== null) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	protected function isIgnoredByMessageRegex(Event $event): bool
+	{
+		if ($event->getMessage() === null) {
+			return false;
+		}
+
+		/** @var string[] $regexes */
+		$regexes = $this->options['ignore_message_regex'];
+		foreach ($regexes as $regex) {
+			if (Regex::match($event->getMessage(), $regex) !== null) {
 				return true;
 			}
 		}
