@@ -190,10 +190,12 @@ sentry:
         integrations:
             - Contributte\Sentry\Integration\IgnoreErrorIntegration([
                 ignore_exception_regex: [
-                    "/Deprecated (.*)/"
+                    '/Deprecated (.*)/'
                 ]
             ])
 ```
+
+Be careful with `"` and `'`. It does matter.
 
 ## Usage
 
