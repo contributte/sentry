@@ -200,6 +200,29 @@ sentry:
 
 Be careful with `"` and `'`. It does matter.
 
+**S3UploadIntegration**
+
+Upload **ladenka** (error file) to S3. URL is stored as tag in Sentry.
+
+```neon
+sentry:
+    client:
+        integrations:
+            - Contributte\Sentry\Integration\S3UploadIntegration()
+
+services:
+    - Contributte\Sentry\Upload\S3Uploader(
+        Contributte\Sentry\Upload\S3Signer(
+          accessKeyId: secret
+          secretKey: secret
+          url: myorg.r2.cloudflarestorage.com / s3.eu-central-1.amazonaws.com
+          bucket: mybucket
+          region: auto
+          prefix: null
+        )
+    )
+```
+
 ## Usage
 
 Sentry is successfully integrated to your [Nette](https://nette.org) application and listen for any errors using [Tracy](https://tracy.nette.org).
