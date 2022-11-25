@@ -121,6 +121,8 @@ See more about configuration under key `sentry` in [official documentation](http
 
 ### Integrations
 
+> Read about integrations in [official Sentry documentation](https://docs.sentry.io/platforms/php/integrations/).
+
 Integrations are some kind of plugins for Sentry SDK. This package brings several integrations.
 
 **NetteApplicationIntegration**
@@ -221,6 +223,26 @@ services:
           prefix: null
         )
     )
+```
+
+### Performance
+
+> Read about performance tracking in [official Sentry documentation](https://docs.sentry.io/platforms/php/performance/).
+
+Performance monitors help you measure application spans.
+
+**NetteApplicationMonitor**
+
+Measure Nette Application lifecycle from request to shutdown.
+
+```neon
+services:
+	- Contributte\Sentry\Performance\NetteApplicationMonitor
+
+	application.application:
+		setup:
+			- @Contributte\Sentry\Performance\NetteApplicationMonitor::hook(@self, 'onRequest')
+			- @Contributte\Sentry\Performance\NetteApplicationMonitor::hook(@self, 'onShutdown')
 ```
 
 ## Usage
