@@ -6,6 +6,7 @@ use Nette\DI\Container;
 use Nette\Http\Session;
 use Sentry\Breadcrumb;
 use Sentry\Event;
+use Sentry\EventHint;
 use Sentry\State\HubInterface;
 
 class NetteSessionIntegration extends BaseIntegration
@@ -19,7 +20,7 @@ class NetteSessionIntegration extends BaseIntegration
 		$this->context = $context;
 	}
 
-	public function setup(HubInterface $hub, Event $event): ?Event
+	public function setup(HubInterface $hub, Event $event, EventHint $hint): ?Event
 	{
 		/** @var Session|null $session */
 		$session = $this->context->getByType(Session::class, false);

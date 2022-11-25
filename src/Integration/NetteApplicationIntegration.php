@@ -7,6 +7,7 @@ use Nette\Application\Request;
 use Nette\DI\Container;
 use Sentry\Breadcrumb;
 use Sentry\Event;
+use Sentry\EventHint;
 use Sentry\State\HubInterface;
 
 class NetteApplicationIntegration extends BaseIntegration
@@ -20,7 +21,7 @@ class NetteApplicationIntegration extends BaseIntegration
 		$this->context = $context;
 	}
 
-	public function setup(HubInterface $hub, Event $event): ?Event
+	public function setup(HubInterface $hub, Event $event, EventHint $hint): ?Event
 	{
 		/** @var Application|null $application */
 		$application = $this->context->getByType(Application::class, false);

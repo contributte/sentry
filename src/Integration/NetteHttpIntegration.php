@@ -5,6 +5,7 @@ namespace Contributte\Sentry\Integration;
 use Nette\DI\Container;
 use Nette\Http\IRequest;
 use Sentry\Event;
+use Sentry\EventHint;
 use Sentry\State\HubInterface;
 
 class NetteHttpIntegration extends BaseIntegration
@@ -18,7 +19,7 @@ class NetteHttpIntegration extends BaseIntegration
 		$this->context = $context;
 	}
 
-	public function setup(HubInterface $hub, Event $event): ?Event
+	public function setup(HubInterface $hub, Event $event, EventHint $hint): ?Event
 	{
 		/** @var IRequest|null $httpRequest */
 		$httpRequest = $this->context->getByType(IRequest::class);

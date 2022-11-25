@@ -7,6 +7,7 @@ use Nette\Http\IRequest;
 use Nette\Security\Identity;
 use Nette\Security\IUserStorage;
 use Sentry\Event;
+use Sentry\EventHint;
 use Sentry\State\HubInterface;
 use Sentry\UserDataBag;
 
@@ -21,7 +22,7 @@ class NetteSecurityIntegration extends BaseIntegration
 		$this->context = $context;
 	}
 
-	public function setup(HubInterface $hub, Event $event): ?Event
+	public function setup(HubInterface $hub, Event $event, EventHint $hint): ?Event
 	{
 		/** @var IUserStorage|null $storage */
 		$storage = $this->context->getByType(IUserStorage::class, false);

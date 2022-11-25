@@ -3,6 +3,7 @@
 namespace Contributte\Sentry\Integration;
 
 use Sentry\Event;
+use Sentry\EventHint;
 use Sentry\State\HubInterface;
 
 class ExtraIntegration extends BaseIntegration
@@ -31,7 +32,7 @@ class ExtraIntegration extends BaseIntegration
 		$this->preset[$field] = $enable;
 	}
 
-	public function setup(HubInterface $hub, Event $event): ?Event
+	public function setup(HubInterface $hub, Event $event, EventHint $hint): ?Event
 	{
 		$extra = array_merge($event->getExtra(), $this->data);
 

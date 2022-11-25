@@ -4,6 +4,7 @@ namespace Contributte\Sentry\Integration;
 
 use Contributte\Sentry\Utils\Regex;
 use Sentry\Event;
+use Sentry\EventHint;
 use Sentry\State\HubInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -30,7 +31,7 @@ class IgnoreErrorIntegration extends BaseIntegration
 		$this->options = $resolver->resolve($options);
 	}
 
-	public function setup(HubInterface $hub, Event $event): ?Event
+	public function setup(HubInterface $hub, Event $event, EventHint $hint): ?Event
 	{
 		if ($this->isIgnoredByExceptionRegex($event)) {
 			return null;
