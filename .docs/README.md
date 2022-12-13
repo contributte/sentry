@@ -243,6 +243,9 @@ services:
 		setup:
 			- @Contributte\Sentry\Performance\NetteApplicationMonitor::hook(@self, 'onRequest')
 			- @Contributte\Sentry\Performance\NetteApplicationMonitor::hook(@self, 'onShutdown')
+			# or
+			- "$onRequest[]" = [@Contributte\Sentry\Performance\NetteApplicationMonitor, onRequest]
+			- "$onShutdown[]" = [@Contributte\Sentry\Performance\NetteApplicationMonitor, onShutdown]
 ```
 
 ## Usage
