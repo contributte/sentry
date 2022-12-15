@@ -31,7 +31,7 @@ class NetteSessionIntegration extends BaseIntegration
 		}
 
 		/** @var array<mixed, string> $iterator */
-		$iterator = $session->getIterator();
+		$iterator = new \ArrayIterator(array_keys($_SESSION['__NF']['DATA'] ?? []));
 		$data = [];
 
 		foreach ($iterator as $section) {
