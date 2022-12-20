@@ -18,25 +18,26 @@
     }
   ],
   "require": {
-    "php": ">=7.2",
-    "sentry/sentry": "^3.3.7",
-    "guzzlehttp/guzzle": "^7.4.1",
-    "guzzlehttp/psr7": "^2.1.0",
+    "php": ">=8.0",
+    "sentry/sentry": "^3.12.0",
+    "guzzlehttp/guzzle": "^7.5.0",
+    "guzzlehttp/psr7": "^2.4.3",
     "php-http/guzzle7-adapter": "1.0.0"
   },
   "require-dev": {
-    "mockery/mockery": "^1.3.5",
-    "nette/application": "^2.4.17 || ^3.0.8",
-    "nette/di": "^2.4.17 || ^3.0.12",
-    "nette/http": "^2.4.12 || ^3.0.7",
-    "nette/security": "^2.4.4 || ^3.0.6",
-    "ninjify/nunjuck": "^0.4.0",
-    "ninjify/qa": "^0.12.2",
-    "phpstan/phpstan": "^1.4.2",
-    "phpstan/phpstan-deprecation-rules": "^1.0.0",
-    "phpstan/phpstan-nette": "^1.0.0",
-    "phpstan/phpstan-strict-rules": "^1.1.0",
-    "tracy/tracy": "^2.6.0"
+    "contributte/qa": "^0.2.0",
+    "mockery/mockery": "^1.5.1",
+    "nette/application": "^v3.1.0",
+    "nette/di": "^v3.1.0",
+    "nette/http": "^v3.2.1",
+    "nette/security": "^v3.1.6",
+    "nette/tester": "^v2.4.3",
+    "ninjify/nunjuck": "^v0.3.0",
+    "phpstan/phpstan": "^1.9.4",
+    "phpstan/phpstan-deprecation-rules": "^1.1.1",
+    "phpstan/phpstan-nette": "^1.2.0",
+    "phpstan/phpstan-strict-rules": "^1.4.4",
+    "tracy/tracy": "^v2.9.5"
   },
   "suggest": {
     "ext-curl": "S3 upload"

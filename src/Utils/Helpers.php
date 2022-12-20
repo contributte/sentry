@@ -13,28 +13,15 @@ class Helpers
 	 */
 	public static function mapSeverity(string $level): Severity
 	{
-		switch ($level) {
-			case ILogger::DEBUG:
-				return Severity::debug();
-
-			case ILogger::INFO:
-				return Severity::info();
-
-			case ILogger::WARNING:
-				return Severity::warning();
-
-			case ILogger::ERROR:
-				return Severity::error();
-
-			case ILogger::EXCEPTION:
-				return Severity::fatal();
-
-			case ILogger::CRITICAL:
-				return Severity::fatal();
-
-			default:
-				return Severity::info();
-		}
+		return match ($level) {
+			ILogger::DEBUG => Severity::debug(),
+			ILogger::INFO => Severity::info(),
+			ILogger::WARNING => Severity::warning(),
+			ILogger::ERROR => Severity::error(),
+			ILogger::EXCEPTION => Severity::fatal(),
+			ILogger::CRITICAL => Severity::fatal(),
+			default => Severity::info(),
+		};
 	}
 
 }

@@ -12,21 +12,16 @@ use Sentry\State\HubInterface;
 class NetteSessionIntegration extends BaseIntegration
 {
 
-	/** @var Container */
-	protected $context;
-
-	public function __construct(Container $context)
+	public function __construct(protected Container $context)
 	{
-		$this->context = $context;
 	}
 
 	public function setup(HubInterface $hub, Event $event, EventHint $hint): ?Event
 	{
-		/** @var Session|null $session */
 		$session = $this->context->getByType(Session::class, false);
 
 		// There is no session
-		if ($session === null) {
+		if (!$session instanceof Session) {
 			return $event;
 		}
 
@@ -55,7 +50,7 @@ class NetteSessionIntegration extends BaseIntegration
 
 		if (PHP_SAPI !== 'cli') {
 			$event->setTags([
-				'phpsessid' => $session->getId(),
+				$session->getName() => $session->getId(),
 			]);
 		}
 

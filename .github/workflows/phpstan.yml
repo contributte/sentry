@@ -13,11 +13,3 @@ jobs:
   phpstan:
     name: "Phpstan"
     uses: contributte/.github/.github/workflows/phpstan.yml@v1
-
-  phpstan24:
-    name: "Phpstan"
-    uses: contributte/.github/.github/workflows/phpstan.yml@v1
-    with:
-      php: "8.0"
-      makefile: "phpstan24"
-      composer: "composer update --prefer-lowest"

@@ -11,21 +11,16 @@ use Sentry\State\HubInterface;
 class NetteHttpIntegration extends BaseIntegration
 {
 
-	/** @var Container */
-	protected $context;
-
-	public function __construct(Container $context)
+	public function __construct(protected Container $context)
 	{
-		$this->context = $context;
 	}
 
 	public function setup(HubInterface $hub, Event $event, EventHint $hint): ?Event
 	{
-		/** @var IRequest|null $httpRequest */
-		$httpRequest = $this->context->getByType(IRequest::class);
+		$httpRequest = $this->context->getByType(IRequest::class, false);
 
 		// There is no http request
-		if ($httpRequest === null) {
+		if (!$httpRequest instanceof IRequest) {
 			return $event;
 		}
 

@@ -9,25 +9,21 @@ use Nette\DI\ContainerLoader;
 final class Container
 {
 
-	/** @var string */
-	private $key;
-
 	/** @var callable[] */
-	private $onCompile = [];
+	private array $onCompile = [];
 
-	public function __construct(string $key)
+	public function __construct(private string $key)
 	{
-		$this->key = $key;
 	}
 
 	public static function of(?string $key = null): Container
 	{
-		return new static($key ?? uniqid(random_bytes(16)));
+		return new self($key ?? uniqid(random_bytes(16)));
 	}
 
 	public function withCompiler(callable $cb): Container
 	{
-		$this->onCompile[] = function (Compiler $compiler) use ($cb): void {
+		$this->onCompile[] = static function (Compiler $compiler) use ($cb): void {
 			$cb($compiler);
 		};
 

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset>
-	<rule ref="./vendor/ninjify/coding-standard/contributte.xml">
+	<rule ref="./vendor/contributte/qa/ruleset.xml">
 		<exclude name="Squiz.Commenting.FunctionComment.InvalidTypeHint"/>
 		<!-- Useless for yield in tests -->
 		<exclude name="SlevomatCodingStandard.ControlStructures.ControlStructureSpacing.IncorrectLinesCountBeforeControlStructure"/>

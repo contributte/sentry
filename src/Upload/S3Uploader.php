@@ -8,12 +8,8 @@ use Throwable;
 class S3Uploader
 {
 
-	/** @var S3Signer */
-	private $signer;
-
-	public function __construct(S3Signer $signer)
+	public function __construct(private S3Signer $signer)
 	{
-		$this->signer = $signer;
 	}
 
 	/**

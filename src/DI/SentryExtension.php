@@ -52,7 +52,6 @@ class SentryExtension extends CompilerExtension
 		]);
 	}
 
-
 	public function loadConfiguration(): void
 	{
 		$config = $this->getConfig();

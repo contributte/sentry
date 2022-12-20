@@ -4,8 +4,8 @@ namespace Contributte\Sentry\Integration;
 
 use Nette\DI\Container;
 use Nette\Http\IRequest;
-use Nette\Security\Identity;
-use Nette\Security\IUserStorage;
+use Nette\Security\SimpleIdentity;
+use Nette\Security\UserStorage;
 use Sentry\Event;
 use Sentry\EventHint;
 use Sentry\State\HubInterface;
@@ -14,29 +14,30 @@ use Sentry\UserDataBag;
 class NetteSecurityIntegration extends BaseIntegration
 {
 
-	/** @var Container */
-	protected $context;
-
-	public function __construct(Container $context)
+	public function __construct(protected Container $context)
 	{
-		$this->context = $context;
 	}
 
 	public function setup(HubInterface $hub, Event $event, EventHint $hint): ?Event
 	{
-		/** @var IUserStorage|null $storage */
-		$storage = $this->context->getByType(IUserStorage::class, false);
+		$storage = $this->context->getByType(UserStorage::class, false);
 
 		// There is no user storage
-		if ($storage === null) {
+		if (!$storage instanceof UserStorage) {
 			return $event;
 		}
 
-		/** @var Identity|null $identity */
-		$identity = $storage->getIdentity();
+		$state = $storage->getState();
+
+		// There is no user logged in
+		if (!$state[0]) {
+			return $event;
+		}
+
+		$identity = $state[1];
 
 		// Anonymous user
-		if ($identity === null) {
+		if (!$identity instanceof SimpleIdentity) {
 			return $event;
 		}
 
