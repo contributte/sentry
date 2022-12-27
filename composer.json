@@ -25,19 +25,19 @@
     "php-http/guzzle7-adapter": "1.0.0"
   },
   "require-dev": {
-    "contributte/qa": "^0.2.0",
+    "contributte/qa": "^0.3.0",
     "mockery/mockery": "^1.5.1",
-    "nette/application": "^v3.1.0",
-    "nette/di": "^v3.1.0",
-    "nette/http": "^v3.2.1",
-    "nette/security": "^v3.1.6",
-    "nette/tester": "^v2.4.3",
-    "ninjify/nunjuck": "^v0.3.0",
+    "nette/application": "^3.1.0",
+    "nette/di": "^3.1.0",
+    "nette/http": "^3.2.1",
+    "nette/security": "^3.1.6",
+    "nette/tester": "^2.4.3",
+    "ninjify/nunjuck": "^0.3.0",
     "phpstan/phpstan": "^1.9.4",
     "phpstan/phpstan-deprecation-rules": "^1.1.1",
     "phpstan/phpstan-nette": "^1.2.0",
     "phpstan/phpstan-strict-rules": "^1.4.4",
-    "tracy/tracy": "^v2.9.5"
+    "tracy/tracy": "^2.9.5"
   },
   "suggest": {
     "ext-curl": "S3 upload"
