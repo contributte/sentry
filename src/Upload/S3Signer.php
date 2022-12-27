@@ -7,43 +7,17 @@ use DateTime;
 class S3Signer
 {
 
-	/** @var DateTime */
-	private $date;
-
-	/** @var string */
-	private $accessKey;
-
-	/** @var string */
-	private $secretKey;
-
-	/** @var string */
-	private $url;
-
-	/** @var string */
-	private $bucket;
-
-	/** @var string */
-	private $region;
-
-	/** @var string|null */
-	private $prefix;
+	private DateTime $date;
 
 	public function __construct(
-		string $accessKeyId,
-		string $secretKey,
-		string $url,
-		string $bucket,
-		string $region = 'auto',
-		?string $prefix = null
+		private string $accessKey,
+		private string $secretKey,
+		private string $url,
+		private string $bucket,
+		private string $region = 'auto',
+		private ?string $prefix = null
 	)
 	{
-		$this->accessKey = $accessKeyId;
-		$this->secretKey = $secretKey;
-		$this->url = $url;
-		$this->bucket = $bucket;
-		$this->region = $region;
-		$this->prefix = $prefix;
-
 		$this->date = new DateTime('UTC');
 	}
 
@@ -66,7 +40,6 @@ class S3Signer
 
 		return ['url' => $url, 'headers' => $headers];
 	}
-
 
 	/**
 	 * @param array<string, string> $headers

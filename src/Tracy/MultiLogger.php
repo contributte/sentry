@@ -8,7 +8,7 @@ class MultiLogger implements ILogger
 {
 
 	/** @var ILogger[] */
-	private $loggers = [];
+	private array $loggers = [];
 
 	public function addLogger(ILogger $logger): void
 	{
@@ -18,6 +18,7 @@ class MultiLogger implements ILogger
 	/**
 	 * @param mixed $value
 	 * @param mixed $priority
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 */
 	public function log($value, $priority = self::INFO): void
 	{

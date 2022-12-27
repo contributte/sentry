@@ -9,11 +9,8 @@ use Sentry\State\HubInterface;
 class ExtraIntegration extends BaseIntegration
 {
 
-	/** @var array<string, mixed> */
-	protected $data = [];
-
 	/** @var array<string, bool> */
-	protected $preset = [
+	protected array $preset = [
 		'memory' => true,
 		'env' => true,
 		'hostname' => true,
@@ -22,9 +19,8 @@ class ExtraIntegration extends BaseIntegration
 	/**
 	 * @param array<string, mixed> $data
 	 */
-	public function __construct(array $data)
+	public function __construct(protected array $data)
 	{
-		$this->data = $data;
 	}
 
 	public function setPreset(string $field, bool $enable = true): void

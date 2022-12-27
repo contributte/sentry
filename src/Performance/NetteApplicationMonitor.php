@@ -13,12 +13,8 @@ use Sentry\Tracing\TransactionContext;
 class NetteApplicationMonitor
 {
 
-	/** @var IRequest */
-	private $request;
-
-	public function __construct(IRequest $request)
+	public function __construct(private IRequest $request)
 	{
-		$this->request = $request;
 	}
 
 	public function onRequest(Application $application, Request $request): void
@@ -74,11 +70,13 @@ class NetteApplicationMonitor
 					$this->onRequest($application, $request);
 				};
 				break;
+
 			case 'onShutdown':
 				$application->onShutdown[] = function (Application $application): void {
 					$this->onShutdown();
 				};
 				break;
+
 			default:
 				throw new LogicalException('Unknown hook');
 		}

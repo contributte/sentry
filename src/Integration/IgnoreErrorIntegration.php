@@ -12,7 +12,7 @@ class IgnoreErrorIntegration extends BaseIntegration
 {
 
 	/** @var mixed[] */
-	private $options;
+	private array $options;
 
 	/**
 	 * @param mixed[] $options

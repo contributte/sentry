@@ -10,11 +10,10 @@ use Tracy\ILogger;
 class SentryLogger implements ILogger
 {
 
-	/** @var bool */
-	protected $captureMessages = true;
+	protected bool $captureMessages = true;
 
 	/** @var string[] */
-	protected $captureLevels = [
+	protected array $captureLevels = [
 		self::WARNING,
 		self::ERROR,
 		self::EXCEPTION,
@@ -37,6 +36,7 @@ class SentryLogger implements ILogger
 	/**
 	 * @param mixed $value
 	 * @param mixed $level
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 */
 	public function log($value, $level = self::INFO): void
 	{

@@ -13,21 +13,16 @@ use Sentry\State\HubInterface;
 class NetteApplicationIntegration extends BaseIntegration
 {
 
-	/** @var Container */
-	protected $context;
-
-	public function __construct(Container $context)
+	public function __construct(protected Container $context)
 	{
-		$this->context = $context;
 	}
 
 	public function setup(HubInterface $hub, Event $event, EventHint $hint): ?Event
 	{
-		/** @var Application|null $application */
 		$application = $this->context->getByType(Application::class, false);
 
 		// There is no application
-		if ($application === null) {
+		if (!$application instanceof Application) {
 			return $event;
 		}
 
@@ -52,7 +47,7 @@ class NetteApplicationIntegration extends BaseIntegration
 							Breadcrumb::LEVEL_INFO,
 							Breadcrumb::TYPE_HTTP,
 							'nette_application_request',
-							sprintf('Nette Application Request #%s', intval($n) + 1),
+							sprintf('Nette Application Request #%s', (int) $n + 1),
 							$data
 						),
 					]

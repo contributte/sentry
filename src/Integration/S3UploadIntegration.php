@@ -8,34 +8,30 @@ use Nette\DI\Container;
 use Sentry\Event;
 use Sentry\EventHint;
 use Sentry\State\HubInterface;
+use Throwable;
 use Tracy\Debugger;
 use Tracy\Logger;
 
 class S3UploadIntegration extends BaseIntegration
 {
 
-	/** @var Container */
-	protected $context;
-
-	public function __construct(Container $context)
+	public function __construct(protected Container $context)
 	{
-		$this->context = $context;
 	}
 
 	public function setup(HubInterface $hub, Event $event, EventHint $hint): ?Event
 	{
-		/** @var S3Uploader|null $uploader */
 		$uploader = $this->context->getByType(S3Uploader::class, false);
 
 		// Required services are missing
-		if ($uploader === null) {
+		if (!$uploader instanceof S3Uploader) {
 			return $event;
 		}
 
 		$exception = $hint->exception;
 
 		// No exception
-		if ($exception === null) {
+		if (!$exception instanceof Throwable) {
 			return $event;
 		}
 
@@ -53,7 +49,7 @@ class S3UploadIntegration extends BaseIntegration
 			$event->setTags([
 				'tracy_file' => $uploaded['url'],
 			]);
-		} catch (UploadException $e) {
+		} catch (UploadException) {
 			// Do nothing
 		}
 
