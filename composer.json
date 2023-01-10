@@ -43,7 +43,8 @@
     "ext-curl": "S3 upload"
   },
   "conflict": {
-    "nette/utils": "<2.5.7",
+    "nette/utils": "<3.2.8",
+    "nette/http": "<3.2.1",
     "php-http/discovery": "<1.14.0"
   },
   "autoload": {
