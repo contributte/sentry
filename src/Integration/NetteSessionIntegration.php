@@ -2,6 +2,7 @@
 
 namespace Contributte\Sentry\Integration;
 
+use ArrayIterator;
 use Nette\DI\Container;
 use Nette\Http\Session;
 use Sentry\Breadcrumb;
@@ -25,8 +26,12 @@ class NetteSessionIntegration extends BaseIntegration
 			return $event;
 		}
 
+		// @see https://github.com/nette/http/blob/v3.1/src/Http/Session.php
+		// phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
+		$sessionData = $_SESSION['__NF']['DATA'] ?? [];
+
 		/** @var array<mixed, string> $iterator */
-		$iterator = $session->getIterator();
+		$iterator = new ArrayIterator(array_keys($sessionData));
 		$data = [];
 
 		foreach ($iterator as $section) {
