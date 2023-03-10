@@ -113,6 +113,7 @@ sentry:
         capture_silenced_errors: false
         max_request_body_size: always
         class_serializers: []
+        traces_sample_rate: 0
 ```
 
 See more about configuration under key `sentry` in [official documentation](https://docs.sentry.io/platforms/php/).
@@ -247,6 +248,17 @@ services:
 			- "$onRequest[]" = [@Contributte\Sentry\Performance\NetteApplicationMonitor, onRequest]
 			- "$onShutdown[]" = [@Contributte\Sentry\Performance\NetteApplicationMonitor, onShutdown]
 ```
+don't forget to specify `traces_sample_rate` parameter, which means uniform sample rate for all transactions to a number between 0 and 1. (For example, to send 20% of transactions, set traces_sample_rate to 0.2.).
+```neon
+extensions:
+    sentry: Contributte\Sentry\DI\SentryExtension
+
+sentry:
+        enable: true
+        client:
+                traces_sample_rate: 1.0 # Trace every transaction, recommended for testing/dev
+```
+
 
 ## Usage
 
