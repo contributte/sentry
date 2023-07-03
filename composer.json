@@ -34,7 +34,7 @@
     "nette/http": "^3.2.1",
     "nette/security": "^3.1.6",
     "nette/tester": "^2.4.3",
-    "tracy/tracy": "^2.9.5"
+    "tracy/tracy": "^2.10.0"
   },
   "suggest": {
     "ext-curl": "S3 upload"
@@ -42,6 +42,7 @@
   "conflict": {
     "nette/utils": "<3.2.8",
     "nette/http": "<3.2.1",
+    "tracy/tracy": "<2.10.0",
     "php-http/discovery": "<1.14.0"
   },
   "autoload": {
