@@ -44,7 +44,7 @@ class NetteSecurityIntegration extends BaseIntegration
 		$httpRequest = $this->context->getByType(IRequest::class);
 
 		$bag = new UserDataBag(
-			(string) $identity->getId(),
+			is_scalar($identity->getId()) ? strval($identity->getId()) : '(unknown)',
 			$identity->getData()['email'] ?? null,
 			$httpRequest->getRemoteAddress(),
 			$identity->getData()['username'] ?? null

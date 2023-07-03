@@ -1,19 +1,21 @@
 includes:
-	- vendor/phpstan/phpstan-nette/extension.neon
-	- vendor/phpstan/phpstan-nette/rules.neon
-	- vendor/phpstan/phpstan-strict-rules/rules.neon
+	- vendor/contributte/phpstan/phpstan.neon
 
 parameters:
 	level: 9
+	phpVersion: 80100
+
+	scanDirectories:
+		- src
+
+	fileExtensions:
+		- php
 
 	paths:
 		- src
+		- .docs
 
 	excludePaths:
 		- src/DI/SentryExtension24.php
 
 	ignoreErrors:
-		-
-			message: "#^Cannot cast mixed to string\\.$#"
-			count: 1
-			path: src/Integration/NetteSecurityIntegration.php

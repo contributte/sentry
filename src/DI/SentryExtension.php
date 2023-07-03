@@ -136,7 +136,9 @@ class SentryExtension extends CompilerExtension
 		}
 
 		$initialize = $class->getMethod('initialize');
+		// @phpstan-ignore-next-line
 		$initialize->addBody($builder->formatPhp(Sentry::class . '::register(?);', [['client' => $client]]));
+		// @phpstan-ignore-next-line
 		$initialize->addBody($builder->formatPhp(Debugger::class . '::setLogger(?);', [$builder->getDefinition($this->prefix('multiLogger'))]));
 	}
 

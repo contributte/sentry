@@ -17,13 +17,13 @@ class MultiLogger implements ILogger
 
 	/**
 	 * @param mixed $value
-	 * @param mixed $priority
+	 * @param string $level
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 */
-	public function log($value, $priority = self::INFO): void
+	public function log($value, $level = self::INFO): void
 	{
 		foreach ($this->loggers as $logger) {
-			$logger->log($value, $priority);
+			$logger->log($value, $level);
 		}
 	}
 

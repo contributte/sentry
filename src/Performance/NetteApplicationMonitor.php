@@ -29,7 +29,7 @@ class NetteApplicationMonitor
 			throw new PerformanceException('Transaction already started');
 		}
 
-		$context = TransactionContext::fromSentryTrace($this->request->getHeader('sentry-trace') ?? '');
+		$context = TransactionContext::fromHeaders($this->request->getHeader('sentry-trace') ?? '', '');
 		$context->setOp('nette.request');
 		$context->setName(sprintf(
 			'%s %s %s',
