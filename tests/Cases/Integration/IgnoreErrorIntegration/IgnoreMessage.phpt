@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 use Contributte\Sentry\Integration\IgnoreErrorIntegration;
-use Ninjify\Nunjuck\Toolkit;
+use Contributte\Tester\Toolkit;
 use Sentry\ClientInterface;
 use Sentry\Event;
 use Sentry\SentrySdk;

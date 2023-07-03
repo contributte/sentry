@@ -3,14 +3,14 @@
 use Contributte\Sentry\DI\SentryExtension;
 use Contributte\Sentry\Exception\LogicalException;
 use Contributte\Sentry\Tracy\MultiLogger;
+use Contributte\Tester\Toolkit;
+use Contributte\Tester\Utils\ContainerBuilder;
+use Contributte\Tester\Utils\Neonkit;
 use Nette\DI\Compiler;
-use Ninjify\Nunjuck\Toolkit;
 use Sentry\SentrySdk;
 use Sentry\State\HubInterface;
 use Tester\Assert;
 use Tester\Environment;
-use Tests\Toolkit\Container;
-use Tests\Toolkit\Helpers;
 use Tracy\Bridges\Nette\TracyExtension;
 use Tracy\ILogger;
 
@@ -26,11 +26,11 @@ Toolkit::setUp(function (): void {
 
 // Basic
 Toolkit::test(function (): void {
-	$container = Container::of()
+	$container = ContainerBuilder::of()
 		->withCompiler(function (Compiler $compiler): void {
 			$compiler->addExtension('tracy', new TracyExtension());
 			$compiler->addExtension('sentry', new SentryExtension());
-			$compiler->addConfig(Helpers::neon('
+			$compiler->addConfig(Neonkit::load('
 				sentry:
 					enable: true
 
@@ -50,11 +50,11 @@ Toolkit::test(function (): void {
 // No client setup
 Toolkit::test(function (): void {
 	Assert::exception(static function (): void {
-		$container = Container::of()
+		$container = ContainerBuilder::of()
 			->withCompiler(function (Compiler $compiler): void {
 				$compiler->addExtension('tracy', new TracyExtension());
 				$compiler->addExtension('sentry', new SentryExtension());
-				$compiler->addConfig(Helpers::neon('
+				$compiler->addConfig(Neonkit::load('
 				sentry:
 					enable: true
 			'));
@@ -67,11 +67,11 @@ Toolkit::test(function (): void {
 
 // No integrations
 Toolkit::test(function (): void {
-	$container = Container::of()
+	$container = ContainerBuilder::of()
 		->withCompiler(function (Compiler $compiler): void {
 			$compiler->addExtension('tracy', new TracyExtension());
 			$compiler->addExtension('sentry', new SentryExtension());
-			$compiler->addConfig(Helpers::neon('
+			$compiler->addConfig(Neonkit::load('
 				sentry:
 					enable: true
 					integrations: false
