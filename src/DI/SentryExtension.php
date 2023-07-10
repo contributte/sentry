@@ -116,23 +116,27 @@ class SentryExtension extends CompilerExtension
 		$client = $config->client ?? [];
 
 		if ($config->integrations) {
-			$client['integrations'] = [
-				// Sentry
-				new Statement(EnvironmentIntegration::class),
-				new Statement(ErrorListenerIntegration::class),
-				new Statement(ExceptionListenerIntegration::class),
-				new Statement(FatalErrorListenerIntegration::class),
-				new Statement(FrameContextifierIntegration::class, [null]),
-				new Statement(ModulesIntegration::class),
-				new Statement(RequestIntegration::class, [null]),
-				new Statement(TransactionIntegration::class),
-				// Nette
-				new Statement(NetteApplicationIntegration::class),
-				new Statement(NetteHttpIntegration::class),
-				new Statement(NetteSecurityIntegration::class),
-				new Statement(NetteSessionIntegration::class),
-				new Statement(ExtraIntegration::class, [[]]),
-			];
+			$client['integrations'] ??= [];
+			$client['integrations'] = array_merge(
+				$client['integrations'],
+				[
+					// Sentry
+					new Statement(EnvironmentIntegration::class),
+					new Statement(ErrorListenerIntegration::class),
+					new Statement(ExceptionListenerIntegration::class),
+					new Statement(FatalErrorListenerIntegration::class),
+					new Statement(FrameContextifierIntegration::class, [null]),
+					new Statement(ModulesIntegration::class),
+					new Statement(RequestIntegration::class, [null]),
+					new Statement(TransactionIntegration::class),
+					// Nette
+					new Statement(NetteApplicationIntegration::class),
+					new Statement(NetteHttpIntegration::class),
+					new Statement(NetteSecurityIntegration::class),
+					new Statement(NetteSessionIntegration::class),
+					new Statement(ExtraIntegration::class, [[]]),
+				]
+			);
 		}
 
 		$initialize = $class->getMethod('initialize');
