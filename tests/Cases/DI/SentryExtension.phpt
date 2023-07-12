@@ -65,7 +65,27 @@ Toolkit::test(function (): void {
 	}, LogicalException::class, 'Missing Sentry DSN config');
 });
 
-// No integrations
+// Default integrations
+Toolkit::test(function (): void {
+	$container = ContainerBuilder::of()
+		->withCompiler(function (Compiler $compiler): void {
+			$compiler->addExtension('tracy', new TracyExtension());
+			$compiler->addExtension('sentry', new SentryExtension());
+			$compiler->addConfig(Neonkit::load('
+				sentry:
+					enable: true
+					client:
+						dsn: "https://fakefakefake@fakefake.ingest.sentry.io/12345678"
+			'));
+		})
+		->build();
+
+	call_user_func([$container, 'initialize']);
+
+	Assert::count(13, SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations());
+});
+
+// No default integrations
 Toolkit::test(function (): void {
 	$container = ContainerBuilder::of()
 		->withCompiler(function (Compiler $compiler): void {
@@ -78,11 +98,40 @@ Toolkit::test(function (): void {
 
 					client:
 						dsn: "https://fakefakefake@fakefake.ingest.sentry.io/12345678"
+						integrations:
+							- Contributte\Sentry\Integration\ExtraIntegration([
+								version: 1.2.3
+							])
 			'));
 		})
 		->build();
 
 	call_user_func([$container, 'initialize']);
 
-	Assert::count(0, SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations());
+	Assert::count(1, SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations());
+});
+
+// Merge integrations
+Toolkit::test(function (): void {
+	$container = ContainerBuilder::of()
+		->withCompiler(function (Compiler $compiler): void {
+			$compiler->addExtension('tracy', new TracyExtension());
+			$compiler->addExtension('sentry', new SentryExtension());
+			$compiler->addConfig(Neonkit::load('
+				sentry:
+					enable: true
+
+					client:
+						dsn: "https://fakefakefake@fakefake.ingest.sentry.io/12345678"
+						integrations:
+							- Contributte\Sentry\Integration\ExtraIntegration([
+								version: 1.2.3
+							])
+			'));
+		})
+		->build();
+
+	call_user_func([$container, 'initialize']);
+
+	Assert::count(14, SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations());
 });
