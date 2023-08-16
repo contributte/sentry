@@ -37,7 +37,7 @@ class SentryExtension extends CompilerExtension
 	public function getConfigSchema(): Schema
 	{
 		return Expect::structure([
-			'enable' => Expect::bool()->default(false),
+			'enable' => Expect::bool()->before(fn ($s): mixed => is_scalar($s) ? filter_var($s, FILTER_VALIDATE_BOOLEAN) : $s)->default(false),
 			'client' => Expect::array()->default([]),
 			'integrations' => Expect::bool()->default(true),
 			'logger' => Expect::structure([

@@ -7,6 +7,7 @@ use Contributte\Tester\Toolkit;
 use Contributte\Tester\Utils\ContainerBuilder;
 use Contributte\Tester\Utils\Neonkit;
 use Nette\DI\Compiler;
+use Nette\DI\InvalidConfigurationException;
 use Sentry\SentrySdk;
 use Sentry\State\HubInterface;
 use Tester\Assert;
@@ -83,6 +84,45 @@ Toolkit::test(function (): void {
 	call_user_func([$container, 'initialize']);
 
 	Assert::count(13, SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations());
+});
+
+// Enable is string
+Toolkit::test(function (): void {
+	$container = ContainerBuilder::of()
+		->withCompiler(function (Compiler $compiler): void {
+			$compiler->addExtension('tracy', new TracyExtension());
+			$compiler->addExtension('sentry', new SentryExtension());
+			$compiler->addConfig(Neonkit::load('
+				sentry:
+					enable: "true"
+					client:
+						dsn: "https://fakefakefake@fakefake.ingest.sentry.io/12345678"
+			'));
+		})
+		->build();
+
+	call_user_func([$container, 'initialize']);
+
+	Assert::equal(12345678, SentrySdk::getCurrentHub()->getClient()->getOptions()->getDsn()->getProjectId());
+});
+// Enable is invalid
+Toolkit::test(function (): void {
+	Assert::exception(
+		static function (): void {
+			ContainerBuilder::of()
+				->withCompiler(function (Compiler $compiler): void {
+					$compiler->addExtension('tracy', new TracyExtension());
+					$compiler->addExtension('sentry', new SentryExtension());
+					$compiler->addConfig(Neonkit::load('
+				sentry:
+					enable: []
+			'));
+				})
+				->build();
+		},
+		InvalidConfigurationException::class,
+		"The item 'sentry › enable' expects to be bool, array given."
+	);
 });
 
 // No default integrations
