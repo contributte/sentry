@@ -54,9 +54,7 @@ class NetteSessionIntegration extends BaseIntegration
 		);
 
 		if (PHP_SAPI !== 'cli') {
-			$event->setTags([
-				$session->getName() => $session->getId(),
-			]);
+			$event->setTag($session->getName(), $session->getId());
 		}
 
 		return $event;
