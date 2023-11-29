@@ -26,6 +26,11 @@ class NetteSessionIntegration extends BaseIntegration
 			return $event;
 		}
 
+		// Closed session
+		if (!$session->isStarted()) {
+			return $event;
+		}
+
 		// @see https://github.com/nette/http/blob/v3.1/src/Http/Session.php
 		// phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
 		$sessionData = $_SESSION['__NF']['DATA'] ?? [];
