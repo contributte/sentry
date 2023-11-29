@@ -4,6 +4,7 @@ namespace Contributte\Sentry\Integration;
 
 use Nette\DI\Container;
 use Nette\Http\IRequest;
+use Nette\Http\Session;
 use Nette\Security\SimpleIdentity;
 use Nette\Security\UserStorage;
 use Sentry\Event;
@@ -24,6 +25,18 @@ class NetteSecurityIntegration extends BaseIntegration
 
 		// There is no user storage
 		if (!$storage instanceof UserStorage) {
+			return $event;
+		}
+
+		$session = $this->context->getByType(Session::class, false);
+
+		// There is no session
+		if (!$session instanceof Session) {
+			return $event;
+		}
+
+		// Closed session
+		if (!$session->isStarted()) {
 			return $event;
 		}
 
