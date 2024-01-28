@@ -8,11 +8,13 @@ use Contributte\Tester\Utils\ContainerBuilder;
 use Contributte\Tester\Utils\Neonkit;
 use Nette\DI\Compiler;
 use Nette\DI\InvalidConfigurationException;
+use Sentry\Client;
 use Sentry\SentrySdk;
 use Sentry\State\HubInterface;
 use Tester\Assert;
 use Tester\Environment;
 use Tracy\Bridges\Nette\TracyExtension;
+use Tracy\Bridges\Psr\TracyToPsrLoggerAdapter;
 use Tracy\ILogger;
 
 require_once __DIR__ . '/../../bootstrap.php';
@@ -174,4 +176,34 @@ Toolkit::test(function (): void {
 	call_user_func([$container, 'initialize']);
 
 	Assert::count(14, SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations());
+});
+
+// Test client has custom logger
+Toolkit::test(function (): void {
+	$container = ContainerBuilder::of()
+		->withCompiler(function (Compiler $compiler): void {
+			$compiler->addExtension('tracy', new TracyExtension());
+			$compiler->addExtension('sentry', new SentryExtension());
+			$compiler->addConfig(Neonkit::load('
+				services:
+					customLogger: Tracy\Bridges\Psr\TracyToPsrLoggerAdapter()
+
+				sentry:
+					enable: true
+
+					client:
+						dsn: "https://fakefakefake@fakefake.ingest.sentry.io/12345678"
+
+					clientBuilder:
+						logger: @customLogger
+			'));
+		})
+		->build();
+
+	call_user_func([$container, 'initialize']);
+	$client = SentrySdk::getCurrentHub()->getClient();
+	Assert::notNull($client);
+	$reflectionClass = new ReflectionClass(Client::class);
+	$reflectionProperty = $reflectionClass->getProperty('logger');
+	Assert::true($reflectionProperty->getValue($client) instanceof TracyToPsrLoggerAdapter);
 });
