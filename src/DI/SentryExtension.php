@@ -39,6 +39,7 @@ class SentryExtension extends CompilerExtension
 		return Expect::structure([
 			'enable' => Expect::bool()->before(fn ($s): mixed => is_scalar($s) ? filter_var($s, FILTER_VALIDATE_BOOLEAN) : $s)->default(false),
 			'client' => Expect::array()->default([]),
+			'clientBuilder' => Expect::array()->default([]),
 			'integrations' => Expect::bool()->default(true),
 			'logger' => Expect::structure([
 				'captureMessages' => Expect::bool()->default(true),
@@ -139,9 +140,27 @@ class SentryExtension extends CompilerExtension
 			);
 		}
 
+		$clientBuilder = $config->clientBuilder ?? [];
+
+		if (($clientBuilder['serializer'] ?? null) !== null) {
+			$clientBuilder['serializer'] = new Statement($clientBuilder['serializer']);
+		}
+
+		if (($clientBuilder['representationSerializer'] ?? null) !== null) {
+			$clientBuilder['representationSerializer'] = new Statement($clientBuilder['representationSerializer']);
+		}
+
+		if (($clientBuilder['logger'] ?? null) !== null) {
+			$clientBuilder['logger'] = new Statement($clientBuilder['logger']);
+		}
+
+		if (($clientBuilder['transportFactory'] ?? null) !== null) {
+			$clientBuilder['transportFactory'] = new Statement($clientBuilder['transportFactory']);
+		}
+
 		$initialize = $class->getMethod('initialize');
 		// @phpstan-ignore-next-line
-		$initialize->addBody($builder->formatPhp(Sentry::class . '::register(?);', [['client' => $client]]));
+		$initialize->addBody($builder->formatPhp(Sentry::class . '::register(?);', [['client' => $client, 'clientBuilder' => $clientBuilder]]));
 		// @phpstan-ignore-next-line
 		$initialize->addBody($builder->formatPhp(Debugger::class . '::setLogger(?);', [$builder->getDefinition($this->prefix('multiLogger'))]));
 	}
