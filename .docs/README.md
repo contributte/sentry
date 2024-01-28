@@ -114,6 +114,15 @@ sentry:
         max_request_body_size: always
         class_serializers: []
         traces_sample_rate: 1
+
+    # The only way to customize client builder:
+    clientBuilder:
+        serializer: @serializer
+        representationSerializer: @representationSerializer
+        logger: @representationSerializer
+        sdkIdentifier: foo
+        sdkVersion: 1.0
+        transportFactory: @transportFactory
 ```
 
 See more about configuration under key `sentry` in [official documentation](https://docs.sentry.io/platforms/php/).
