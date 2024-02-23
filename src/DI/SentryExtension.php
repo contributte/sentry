@@ -132,7 +132,6 @@ class SentryExtension extends CompilerExtension
 					new Statement(TransactionIntegration::class),
 					// Nette
 					new Statement(NetteApplicationIntegration::class),
-					new Statement(NetteHttpIntegration::class),
 					new Statement(NetteSecurityIntegration::class),
 					new Statement(NetteSessionIntegration::class),
 					new Statement(ExtraIntegration::class, [[]]),

@@ -20,11 +20,7 @@ Register Nette extension.
 
 ```
 extensions:
-    # Nette 3+
     sentry: Contributte\Sentry\DI\SentryExtension
-
-    # Nette 2.4
-    sentry: Contributte\Sentry\DI\SentryExtension24
 ```
 
 ## Configuration
@@ -81,7 +77,6 @@ sentry:
             Sentry\Integration\TransactionIntegration()
             # Nette
             Contributte\Sentry\Integration\NetteApplicationIntegration()
-            Contributte\Sentry\Integration\NetteHttpIntegration()
             Contributte\Sentry\Integration\NetteSecurityIntegration()
             Contributte\Sentry\Integration\NetteSessionIntegration()
             Contributte\Sentry\Integration\ExtraIntegration([
@@ -148,7 +143,7 @@ sentry:
 
 **NetteHttpIntegration**
 
-Add information about `nette/http` to Sentry event.
+Add information about `nette/http` to Sentry event. It's preferred to use default integration (https://github.com/getsentry/sentry-php/blob/master/src/Integration/RequestIntegration.php).
 
 ```neon
 sentry:
