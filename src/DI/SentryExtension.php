@@ -140,10 +140,6 @@ class SentryExtension extends CompilerExtension
 
 		$clientBuilder = $config->clientBuilder ?? [];
 
-		if (($clientBuilder['serializer'] ?? null) !== null) {
-			$clientBuilder['serializer'] = new Statement($clientBuilder['serializer']);
-		}
-
 		if (($clientBuilder['representationSerializer'] ?? null) !== null) {
 			$clientBuilder['representationSerializer'] = new Statement($clientBuilder['representationSerializer']);
 		}
@@ -152,8 +148,8 @@ class SentryExtension extends CompilerExtension
 			$clientBuilder['logger'] = new Statement($clientBuilder['logger']);
 		}
 
-		if (($clientBuilder['transportFactory'] ?? null) !== null) {
-			$clientBuilder['transportFactory'] = new Statement($clientBuilder['transportFactory']);
+		if (($clientBuilder['transport'] ?? null) !== null) {
+			$clientBuilder['transport'] = new Statement($clientBuilder['transport']);
 		}
 
 		$initialize = $class->getMethod('initialize');

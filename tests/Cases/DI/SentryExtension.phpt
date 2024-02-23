@@ -105,7 +105,7 @@ Toolkit::test(function (): void {
 
 	call_user_func([$container, 'initialize']);
 
-	Assert::equal(12345678, SentrySdk::getCurrentHub()->getClient()->getOptions()->getDsn()->getProjectId());
+	Assert::equal('12345678', SentrySdk::getCurrentHub()->getClient()->getOptions()->getDsn()->getProjectId());
 });
 // Enable is invalid
 Toolkit::test(function (): void {

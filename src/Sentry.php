@@ -7,9 +7,8 @@ use Psr\Log\LoggerInterface;
 use Sentry\ClientBuilder;
 use Sentry\SentrySdk;
 use Sentry\Serializer\RepresentationSerializerInterface;
-use Sentry\Serializer\SerializerInterface;
 use Sentry\State\Hub;
-use Sentry\Transport\TransportFactoryInterface;
+use Sentry\Transport\TransportInterface;
 
 class Sentry
 {
@@ -18,12 +17,11 @@ class Sentry
 	 * @param array{
 	 *     client?: array<string, mixed>,
 	 *     clientBuilder?: array{
-	 *        serializer?: SerializerInterface,
 	 *        representationSerializer?: RepresentationSerializerInterface,
 	 *        logger?: LoggerInterface,
 	 *        sdkIdentifier?: string,
 	 *        sdkVersion?: string,
-	 *        transportFactory?: TransportFactoryInterface,
+	 *        transport?: TransportInterface,
 	 *     }
 	 * } $config
 	 */
@@ -38,10 +36,6 @@ class Sentry
 		}
 
 		$builder = ClientBuilder::create($config['client']);
-
-		if (($config['clientBuilder']['serializer'] ?? null) !== null) {
-			$builder->setSerializer($config['clientBuilder']['serializer']);
-		}
 
 		if (($config['clientBuilder']['representationSerializer'] ?? null) !== null) {
 			$builder->setRepresentationSerializer($config['clientBuilder']['representationSerializer']);
@@ -59,8 +53,8 @@ class Sentry
 			$builder->setSdkVersion($config['clientBuilder']['sdkVersion']);
 		}
 
-		if (($config['clientBuilder']['transportFactory'] ?? null) !== null) {
-			$builder->setTransportFactory($config['clientBuilder']['transportFactory']);
+		if (($config['clientBuilder']['transport'] ?? null) !== null) {
+			$builder->setTransport($config['clientBuilder']['transport']);
 		}
 
 		$hub = new Hub($builder->getClient());
