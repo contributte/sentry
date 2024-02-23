@@ -15,7 +15,4 @@ parameters:
 		- src
 		- .docs
 
-	excludePaths:
-		- src/DI/SentryExtension24.php
-
 	ignoreErrors:
