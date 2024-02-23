@@ -112,12 +112,11 @@ sentry:
 
     # The only way to customize client builder:
     clientBuilder:
-        serializer: @serializer
         representationSerializer: @representationSerializer
         logger: @representationSerializer
         sdkIdentifier: foo
         sdkVersion: 1.0
-        transportFactory: @transportFactory
+        transport: @transport
 ```
 
 See more about configuration under key `sentry` in [official documentation](https://docs.sentry.io/platforms/php/).
