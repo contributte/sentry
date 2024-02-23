@@ -1,10 +1,11 @@
-<?xml version="1.0"?>
-<ruleset>
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset
+	name="app"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
+>
 	<rule ref="./vendor/contributte/qa/ruleset.xml">
-		<exclude name="Squiz.Commenting.FunctionComment.InvalidTypeHint"/>
-		<!-- Useless for yield in tests -->
-		<exclude name="SlevomatCodingStandard.ControlStructures.ControlStructureSpacing.IncorrectLinesCountBeforeControlStructure"/>
-		<exclude name="SlevomatCodingStandard.ControlStructures.ControlStructureSpacing.IncorrectLinesCountAfterControlStructure"/>
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamName"/>
 	</rule>
 
 	<!-- Package specific rules -->

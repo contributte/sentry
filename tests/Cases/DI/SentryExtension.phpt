@@ -47,7 +47,7 @@ Toolkit::test(function (): void {
 
 	Assert::count(3, $container->findByType(ILogger::class));
 	Assert::type(MultiLogger::class, $container->getByType(ILogger::class));
-	Assert::count(13, SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations());
+	Assert::count(12, SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations());
 });
 
 // No client setup
@@ -85,7 +85,7 @@ Toolkit::test(function (): void {
 
 	call_user_func([$container, 'initialize']);
 
-	Assert::count(13, SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations());
+	Assert::count(12, SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations());
 });
 
 // Enable is string
@@ -175,7 +175,7 @@ Toolkit::test(function (): void {
 
 	call_user_func([$container, 'initialize']);
 
-	Assert::count(14, SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations());
+	Assert::count(13, SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations());
 });
 
 // Test client has custom logger

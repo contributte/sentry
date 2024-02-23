@@ -5,6 +5,7 @@ namespace Contributte\Sentry\Integration;
 use Nette\DI\Container;
 use Nette\Http\IRequest;
 use Nette\Http\Session;
+use Nette\Security\Identity;
 use Nette\Security\SimpleIdentity;
 use Nette\Security\UserStorage;
 use Sentry\Event;
@@ -50,14 +51,14 @@ class NetteSecurityIntegration extends BaseIntegration
 		$identity = $state[1];
 
 		// Anonymous user
-		if (!$identity instanceof SimpleIdentity) {
+		if (!($identity instanceof SimpleIdentity) && !($identity instanceof Identity)) {
 			return $event;
 		}
 
 		$httpRequest = $this->context->getByType(IRequest::class);
 
 		$bag = new UserDataBag(
-			is_scalar($identity->getId()) ? strval($identity->getId()) : '(unknown)',
+			strval($identity->getId()),
 			$identity->getData()['email'] ?? null,
 			$httpRequest->getRemoteAddress(),
 			$identity->getData()['username'] ?? null

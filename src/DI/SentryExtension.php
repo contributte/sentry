@@ -4,7 +4,6 @@ namespace Contributte\Sentry\DI;
 
 use Contributte\Sentry\Integration\ExtraIntegration;
 use Contributte\Sentry\Integration\NetteApplicationIntegration;
-use Contributte\Sentry\Integration\NetteHttpIntegration;
 use Contributte\Sentry\Integration\NetteSecurityIntegration;
 use Contributte\Sentry\Integration\NetteSessionIntegration;
 use Contributte\Sentry\Sentry;

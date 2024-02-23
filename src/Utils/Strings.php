@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Sentry\Utils;
 
@@ -12,10 +10,7 @@ class Strings
 		return $debugMode ? 'debug' : 'production';
 	}
 
-	/**
-	 * @param scalar|null $str
-	 */
-	public static function stringify($str): string
+	public static function stringify(string|int|float|bool|null $str): string
 	{
 		if ($str === null) {
 			return 'null';

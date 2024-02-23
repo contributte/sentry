@@ -3,15 +3,29 @@
 namespace Contributte\Sentry;
 
 use Contributte\Sentry\Exception\LogicalException;
+use Psr\Log\LoggerInterface;
 use Sentry\ClientBuilder;
 use Sentry\SentrySdk;
+use Sentry\Serializer\RepresentationSerializerInterface;
+use Sentry\Serializer\SerializerInterface;
 use Sentry\State\Hub;
+use Sentry\Transport\TransportFactoryInterface;
 
 class Sentry
 {
 
 	/**
-	 * @param array{client?: array<string, mixed>, clientBuilder?: array<string, mixed>} $config
+	 * @param array{
+	 *     client?: array<string, mixed>,
+	 *     clientBuilder?: array{
+	 *        serializer?: SerializerInterface,
+	 *        representationSerializer?: RepresentationSerializerInterface,
+	 *        logger?: LoggerInterface,
+	 *        sdkIdentifier?: string,
+	 *        sdkVersion?: string,
+	 *        transportFactory?: TransportFactoryInterface,
+	 *     }
+	 * } $config
 	 */
 	public static function register(array $config): void
 	{
