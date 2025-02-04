@@ -32,10 +32,10 @@ class NetteSessionIntegration extends BaseIntegration
 		}
 
 		// @see https://github.com/nette/http/blob/v3.1/src/Http/Session.php
-		// phpcs:ignore SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable
-		$sessionData = $_SESSION['__NF']['DATA'] ?? [];
+		/** @var array<string, mixed> $sessionData */
+		$sessionData = $_SESSION['__NF']['DATA'] ?? []; // @phpstan-ignore-line
 
-		/** @var array<mixed, string> $iterator */
+		/** @var ArrayIterator<int, string> $iterator */
 		$iterator = new ArrayIterator(array_keys($sessionData));
 		$data = [];
 

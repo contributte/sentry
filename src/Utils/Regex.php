@@ -17,7 +17,7 @@ final class Regex
 	}
 
 	/**
-	 * @return array<array<int, int|string|null>|string|null>|null
+	 * @return array<mixed>|null
 	 */
 	public static function matchAll(string $subject, string $pattern, int $flags = 0): ?array
 	{

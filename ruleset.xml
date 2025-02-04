@@ -6,6 +6,7 @@
 >
 	<rule ref="./vendor/contributte/qa/ruleset.xml">
 		<exclude name="Squiz.Commenting.FunctionComment.MissingParamName"/>
+		<exclude name="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable"/>
 	</rule>
 
 	<!-- Package specific rules -->
