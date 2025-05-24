@@ -195,6 +195,10 @@ sentry:
     client:
         integrations:
             - Contributte\Sentry\Integration\IgnoreErrorIntegration([
+                ignore_exception_instance: [
+                    FooException::class,
+                    BarException::class,
+                ],
                 ignore_exception_regex: [
                     '/Deprecated (.*)/'
                 ],
