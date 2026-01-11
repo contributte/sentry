@@ -4,7 +4,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
 >
-	<rule ref="./vendor/contributte/qa/ruleset.xml">
+	<rule ref="./vendor/contributte/qa/ruleset-8.2.xml">
 		<exclude name="Squiz.Commenting.FunctionComment.MissingParamName"/>
 		<exclude name="SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable.DisallowedSuperGlobalVariable"/>
 	</rule>
@@ -16,7 +16,10 @@
 				<element key="src" value="Contributte\Sentry"/>
 				<element key="tests" value="Tests"/>
 			</property>
-			<property name="extensions" type="array" value="php,phpt"/>
+			<property name="extensions" type="array">
+				<element value="php"/>
+				<element value="phpt"/>
+			</property>
 		</properties>
 	</rule>
 
