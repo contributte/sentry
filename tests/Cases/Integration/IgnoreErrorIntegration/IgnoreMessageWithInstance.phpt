@@ -8,17 +8,11 @@ use Sentry\ExceptionDataBag;
 use Sentry\SentrySdk;
 use Sentry\State\Scope;
 use Tester\Assert;
+use Tests\Fixtures\BadException;
+use Tests\Fixtures\GoodException;
 use function Sentry\withScope;
 
 require_once __DIR__ . '/../../../bootstrap.php';
-
-class GoodException extends RuntimeException
-{
-}
-
-class BadException extends RuntimeException
-{
-}
 
 // not matched exception and matched event
 Toolkit::test(function (): void {
