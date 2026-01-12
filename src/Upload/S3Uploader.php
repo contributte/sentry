@@ -28,8 +28,16 @@ class S3Uploader
 
 		$url = $signed['url'];
 
+		if ($url === '') {
+			throw new UploadException('Invalid signed URL');
+		}
+
 		// Read file
 		$content = file_get_contents($file);
+
+		if ($content === false) {
+			throw new UploadException(sprintf('Cannot read file: %s', $file));
+		}
 
 		try {
 			$curl = curl_init();
