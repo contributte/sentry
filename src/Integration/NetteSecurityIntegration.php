@@ -5,8 +5,7 @@ namespace Contributte\Sentry\Integration;
 use Nette\DI\Container;
 use Nette\Http\IRequest;
 use Nette\Http\Session;
-use Nette\Security\Identity;
-use Nette\Security\SimpleIdentity;
+use Nette\Security\IIdentity;
 use Nette\Security\UserStorage;
 use Sentry\Event;
 use Sentry\EventHint;
@@ -51,21 +50,26 @@ class NetteSecurityIntegration extends BaseIntegration
 		$identity = $state[1];
 
 		// Anonymous user
-		if (!($identity instanceof SimpleIdentity) && !($identity instanceof Identity)) {
+		if (!($identity instanceof IIdentity)) {
 			return $event;
 		}
 
 		$httpRequest = $this->context->getByType(IRequest::class);
 
+		/** @var array<string, mixed> $identityData */
+		$identityData = $identity->getData();
+		$identityRoles = $identity->getRoles();
+		$identityId = $identity->getId();
+
 		$bag = new UserDataBag(
-			strval($identity->getId()),
-			$identity->getData()['email'] ?? null,
+			is_scalar($identityId) ? (string) $identityId : '',
+			is_string($identityData['email'] ?? null) ? $identityData['email'] : null,
 			$httpRequest->getRemoteAddress(),
-			$identity->getData()['username'] ?? null
+			is_string($identityData['username'] ?? null) ? $identityData['username'] : null
 		);
 
-		$bag->setMetadata('Roles', implode(',', $identity->getRoles()));
-		$bag->setMetadata('Identity', $identity->getData());
+		$bag->setMetadata('Roles', implode(',', $identityRoles));
+		$bag->setMetadata('Identity', $identityData);
 
 		$event->setUser($bag);
 
