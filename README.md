@@ -18,8 +18,6 @@
 Website 🚀 <a href="https://contributte.org">contributte.org</a> | Contact 👨🏻‍💻 <a href="https://f3l1x.io">f3l1x.io</a> | Twitter 🐦 <a href="https://twitter.com/contributte">@contributte</a>
 </p>
 
-# Contributte Sentry
-
 Sentry integration for Nette applications with Tracy logging, Nette context integrations, and performance monitoring helpers.
 
 ## Versions
@@ -31,13 +29,13 @@ Sentry integration for Nette applications with Tracy logging, Nette context inte
 
 ## Contents
 
-- [Setup](#setup)
+- [Installation](#installation)
 - [Configuration](#configuration)
 - [Extra](#extra)
 - [Usage](#usage)
 - [Examples](#examples)
 
-## Setup
+## Installation
 
 Install composer package.
 
@@ -70,10 +68,10 @@ Full configuration could look like this:
 
 ```neon
 sentry:
-    # Enable / disable on local or producation
+    # Enable / disable on local or production
     enable: %productionMode%
 
-    # Enable / disable build-in and Nette integrations
+    # Enable / disable built-in and Nette integrations
     integrations: true
 
     # Sentry logger configuration
@@ -252,12 +250,12 @@ sentry:
 services:
     - Contributte\Sentry\Upload\S3Uploader(
         Contributte\Sentry\Upload\S3Signer(
-          accessKeyId: secret
-          secretKey: secret
-          url: myorg.r2.cloudflarestorage.com / s3.eu-central-1.amazonaws.com
-          bucket: mybucket
-          region: auto
-          prefix: null
+            accessKeyId: secret
+            secretKey: secret
+            url: myorg.r2.cloudflarestorage.com / s3.eu-central-1.amazonaws.com
+            bucket: mybucket
+            region: auto
+            prefix: null
         )
     )
 ```
@@ -274,15 +272,15 @@ Measure Nette Application lifecycle from request to shutdown.
 
 ```neon
 services:
-	- Contributte\Sentry\Performance\NetteApplicationMonitor
+    - Contributte\Sentry\Performance\NetteApplicationMonitor
 
-	application.application:
-		setup:
-			- @Contributte\Sentry\Performance\NetteApplicationMonitor::hook(@self, 'onRequest')
-			- @Contributte\Sentry\Performance\NetteApplicationMonitor::hook(@self, 'onShutdown')
-			# or
-			- "$onRequest[]" = [@Contributte\Sentry\Performance\NetteApplicationMonitor, onRequest]
-			- "$onShutdown[]" = [@Contributte\Sentry\Performance\NetteApplicationMonitor, onShutdown]
+    application.application:
+        setup:
+            - @Contributte\Sentry\Performance\NetteApplicationMonitor::hook(@self, 'onRequest')
+            - @Contributte\Sentry\Performance\NetteApplicationMonitor::hook(@self, 'onShutdown')
+            # or
+            - "$onRequest[]" = [@Contributte\Sentry\Performance\NetteApplicationMonitor, onRequest]
+            - "$onShutdown[]" = [@Contributte\Sentry\Performance\NetteApplicationMonitor, onShutdown]
 ```
 
 Don't forget to specify `traces_sample_rate` parameter, which means uniform sample rate for all transactions to a number between 0 and 1.
@@ -290,16 +288,16 @@ For example, to send 20% of transactions, set `traces_sample_rate` to `0.2`.
 
 ```neon
 sentry:
-        client:
-                # Trace every transaction, recommended for testing/dev
-                traces_sample_rate: 1
+    client:
+        # Trace every transaction, recommended for testing/dev
+        traces_sample_rate: 1
 ```
 
 ## Usage
 
 Sentry is successfully integrated to your [Nette](https://nette.org) application and listen for any errors using [Tracy](https://tracy.nette.org).
 
-Let's test it using this smelling code.
+Let's test it using this sample code.
 
 ```php
 <?php declare(strict_types=1);
