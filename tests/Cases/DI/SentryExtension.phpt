@@ -2,13 +2,17 @@
 
 use Contributte\Sentry\DI\SentryExtension;
 use Contributte\Sentry\Exception\LogicalException;
+use Contributte\Sentry\Integration\NetteHttpIntegration;
+use Contributte\Sentry\Integration\NetteSecurityIntegration;
 use Contributte\Sentry\Tracy\MultiLogger;
 use Contributte\Tester\Toolkit;
 use Contributte\Tester\Utils\ContainerBuilder;
 use Contributte\Tester\Utils\Neonkit;
+use Nette\Bridges\HttpDI\HttpExtension;
 use Nette\DI\Compiler;
 use Nette\DI\InvalidConfigurationException;
 use Sentry\Client;
+use Sentry\Integration\RequestIntegration;
 use Sentry\SentrySdk;
 use Sentry\State\HubInterface;
 use Tester\Assert;
@@ -206,4 +210,35 @@ Toolkit::test(function (): void {
 	$reflectionClass = new ReflectionClass(Client::class);
 	$reflectionProperty = $reflectionClass->getProperty('logger');
 	Assert::true($reflectionProperty->getValue($client) instanceof TracyToPsrLoggerAdapter);
+});
+
+// Configure Nette integrations
+Toolkit::test(function (): void {
+	$container = ContainerBuilder::of()
+		->withCompiler(function (Compiler $compiler): void {
+			$compiler->addExtension('tracy', new TracyExtension());
+			$compiler->addExtension('http', new HttpExtension(true));
+			$compiler->addExtension('sentry', new SentryExtension());
+			$compiler->addConfig(Neonkit::load('
+				sentry:
+					enable: true
+					integrations: false
+
+					client:
+						dsn: "https://fakefakefake@fakefake.ingest.sentry.io/12345678"
+						integrations:
+							- Contributte\Sentry\Integration\NetteHttpIntegration(options: [pii_sanitize_headers: [x-api-key]])
+							- Contributte\Sentry\Integration\NetteSecurityIntegration(anonymizeIp: true)
+							- Sentry\Integration\RequestIntegration(Contributte\Sentry\Integration\NetteRequestFetcher(@Nette\Http\IRequest))
+			'));
+		})
+		->build();
+
+	call_user_func([$container, 'initialize']);
+
+	$integrations = SentrySdk::getCurrentHub()->getClient()->getOptions()->getIntegrations();
+	Assert::count(3, $integrations);
+	Assert::type(NetteHttpIntegration::class, $integrations[0]);
+	Assert::type(NetteSecurityIntegration::class, $integrations[1]);
+	Assert::type(RequestIntegration::class, $integrations[2]);
 });
