@@ -142,24 +142,48 @@ sentry:
 
 **NetteHttpIntegration**
 
-Add information about `nette/http` to Sentry event. It's preferred to use default integration (https://github.com/getsentry/sentry-php/blob/master/src/Integration/RequestIntegration.php).
+Add information about `nette/http` request to Sentry event. It's preferred to use default integration (https://github.com/getsentry/sentry-php/blob/master/src/Integration/RequestIntegration.php).
+
+The Nette request is converted to a PSR-7 request and the request data are collected by the SDK `RequestIntegration`,
+so the SDK options `send_default_pii`, `max_request_body_size` and `data_collection` (sentry/sentry 4.38+) are respected.
+Cookies, the client IP address and sensitive headers (`Authorization`, `Cookie`, ...) are sent only when the SDK allows to collect personal data.
+You can pass the `RequestIntegration` options (e.g. `pii_sanitize_headers`) as the second argument.
 
 ```neon
 sentry:
     client:
         integrations:
             - Contributte\Sentry\Integration\NetteHttpIntegration()
+            # or with custom sanitized headers
+            - Contributte\Sentry\Integration\NetteHttpIntegration(options: [pii_sanitize_headers: [authorization, cookie, x-api-key]])
+```
+
+If you want to stick with the SDK integration only, you can pass the Nette request to it directly:
+
+```neon
+sentry:
+    client:
+        integrations:
+            - Sentry\Integration\RequestIntegration(Contributte\Sentry\Integration\NetteRequestFetcher(@Nette\Http\IRequest))
 ```
 
 **NetteSecurityIntegration**
 
-Add information about `nette/security` to Sentry event.
+Add information about `nette/security` logged user (id, username and roles) to Sentry event.
+
+The user e-mail, IP address and identity data are sent only when the SDK allows to collect user info
+(`send_default_pii: true` or `data_collection.user_info: true` on sentry/sentry 4.38+).
+
+If you want to send the IP address in anonymized form (IPv4 `/24`, IPv6 `/48`, e.g. `192.168.122.1` → `192.168.122.0`),
+enable the `anonymizeIp` option. The anonymized IP address is then always sent instead of the full one, even if collecting user info is disabled.
 
 ```neon
 sentry:
     client:
         integrations:
             - Contributte\Sentry\Integration\NetteSecurityIntegration()
+            # or with anonymized IP address
+            - Contributte\Sentry\Integration\NetteSecurityIntegration(anonymizeIp: true)
 ```
 
 **NetteSessionIntegration**
